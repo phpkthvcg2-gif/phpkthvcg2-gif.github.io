@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c9f6f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e7a52;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- 牙齿图形 -->
+  <path d="M256 107 C187 107 149 147 149 200 C149 253 165 293 181 333 C192 360 197 387 203 405 C208 421 224 427 235 416 C245 405 251 379 256 352 C261 379 267 405 277 416 C288 427 304 421 309 405 C315 387 320 360 331 333 C347 293 363 253 363 200 C363 147 325 107 256 107 Z" fill="#ffffff" opacity="0.95"/>
+  <!-- 心形/健康标记 -->
+  <path d="M256 267 C245 251 224 251 224 272 C224 293 256 315 256 315 C256 315 288 293 288 272 C288 251 267 251 256 267 Z" fill="#e74c3c" opacity="0.8"/>
+</svg>
