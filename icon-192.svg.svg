@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- 圆角背景：苹果蓝渐变 -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4DA3FF"/>
+      <stop offset="100%" stop-color="#007AFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="44" fill="url(#bgGrad)"/>
+  <!-- 白色牙齿轮廓 -->
+  <path d="M96 48 C72 48 56 68 56 92 C56 120 68 156 96 172 C124 156 136 120 136 92 C136 68 120 48 96 48 Z" 
+        fill="none" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
+  <!-- 右上角粉红心 -->
+  <path d="M142 62 c-5 -8 -18 -8 -23 0 c-5 -8 -18 -8 -23 0 c0 0 0 14 23 27 C142 76 142 62 142 62 Z" 
+        fill="#FF6B81" transform="translate(6, -4)"/>
+</svg>
