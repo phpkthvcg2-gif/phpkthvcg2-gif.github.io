@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>口腔溃疡预防健康管理 V1.4</title>
+  <title>口腔溃疡预防健康管理 V1.5</title>
   <!-- PWA配置 -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="口腔健康记录">
-  <meta name="theme-color" content="#2c9f6f">
+  <meta name="theme-color" content="#007AFF">
   <meta name="description" content="口腔溃疡预防健康管理，记录每日饮食作息，守护口腔健康">
   <style>
 /* ============================================
@@ -25,29 +25,30 @@
 }
 
 :root {
-  --primary: #2c9f6f;
-  --primary-light: #e8f8f0;
-  --primary-dark: #1e7a52;
-  --text-main: #2c3e50;
-  --text-sub: #7f8c8d;
-  --text-light: #bdc3c7;
-  --bg-page: #f5f7fa;
+  /* V1.5 苹果健康蓝色风格 */
+  --primary: #007AFF;
+  --primary-light: #E3F0FF;
+  --primary-dark: #0056CC;
+  --text-main: #1C1C1E;
+  --text-sub: #8E8E93;
+  --text-light: #C7C7CC;
+  --bg-page: #F2F2F7;
   --bg-card: #ffffff;
-  --border: #e8ecf1;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
-  --radius: 12px;
-  --radius-sm: 8px;
+  --border: #E5E5EA;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 4px 12px rgba(0, 122, 255, 0.08);
+  --radius: 16px;
+  --radius-sm: 10px;
 
-  /* 风险等级配色 */
-  --risk-healthy: #2ecc71;
-  --risk-healthy-bg: #eafaf1;
-  --risk-low: #f1c40f;
-  --risk-low-bg: #fef9e7;
-  --risk-mid: #e67e22;
-  --risk-mid-bg: #fdf2e9;
-  --risk-high: #e74c3c;
-  --risk-high-bg: #fdedec;
+  /* 风险等级配色（保持苹果健康风格） */
+  --risk-healthy: #34C759;
+  --risk-healthy-bg: #E8F9ED;
+  --risk-low: #FFCC00;
+  --risk-low-bg: #FFF9E0;
+  --risk-mid: #FF9500;
+  --risk-mid-bg: #FFF3E0;
+  --risk-high: #FF3B30;
+  --risk-high-bg: #FFEBE9;
 }
 
 body {
@@ -890,12 +891,368 @@ body {
   color: var(--risk-healthy);
 }
 
+/* ============================================
+   V1.5 阶段三：健康评分柱状图
+   ============================================ */
+.chart-card {
+  padding: 20px;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.chart-header h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.chart-toggle {
+  display: flex;
+  background: var(--bg-page);
+  border-radius: 8px;
+  padding: 2px;
+}
+.chart-toggle-btn {
+  padding: 4px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chart-toggle-btn.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.chart-summary {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+.chart-avg-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-left: 4px;
+}
+.chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 160px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--border);
+  gap: 4px;
+}
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+.chart-bar {
+  width: 100%;
+  max-width: 28px;
+  border-radius: 6px 6px 0 0;
+  min-height: 2px;
+  transition: height 0.3s ease;
+  background: var(--primary);
+  opacity: 0.85;
+}
+.chart-bar.healthy { background: var(--risk-healthy); }
+.chart-bar.low-risk { background: var(--risk-low); }
+.chart-bar.mid-risk { background: var(--risk-mid); }
+.chart-bar.high-risk { background: var(--risk-high); }
+.chart-bar.no-data {
+  background: var(--text-light);
+  opacity: 0.3;
+}
+.chart-bar-value {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 3px;
+}
+.chart-x-axis {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 8px 0;
+  gap: 4px;
+}
+.chart-x-label {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+.chart-x-label.today {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   V1.5 阶段四：侧边抽屉菜单
+   ============================================ */
+.settings-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.settings-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.app-header {
+  position: relative;
+}
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: #fff;
+  z-index: 101;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.1);
+}
+.drawer.active {
+  left: 0;
+}
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.drawer-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: var(--text-sub);
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drawer-close:hover {
+  background: var(--bg-page);
+  color: var(--text-main);
+}
+.drawer-menu {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+.drawer-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 15px;
+  color: var(--text-main);
+}
+.drawer-menu-item:hover {
+  background: var(--primary-light);
+}
+.menu-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.menu-text {
+  flex: 1;
+}
+.menu-arrow {
+  color: var(--text-light);
+  font-size: 18px;
+}
+.drawer-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0;
+}
+.drawer-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.drawer-version {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* V1.5修正：评分项/分值编辑弹窗 */
+.edit-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.edit-item-row:last-child { border-bottom: none; }
+.edit-item-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.edit-item-name {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+.edit-item-name:focus { border-color: var(--primary); }
+.edit-item-score {
+  width: 70px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+}
+.edit-item-score:focus { border-color: var(--primary); }
+.edit-total-hint {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--bg-page);
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+.edit-total-hint .total-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ============================================
+   V1.5 阶段一：移动端适配（修复iPhone日历遮挡Bug）
+   ============================================ */
+@media screen and (max-width: 480px) {
+  .app-container {
+    padding: 16px 12px 40px;
+  }
+  .app-header h1 {
+    font-size: 20px;
+  }
+  .card {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  /* 日历单元格：缩小高度，分数改为流式布局避免遮挡 */
+  .calendar-grid {
+    gap: 2px;
+  }
+  .calendar-cell {
+    min-height: 56px;
+    padding: 4px 3px;
+    border-radius: 6px;
+  }
+  .cell-date {
+    font-size: 12px;
+  }
+  /* 分数标签不再绝对定位，改为放在日期下方流式排列 */
+  .cell-score {
+    position: static;
+    top: auto;
+    right: auto;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 4px;
+    margin-top: 2px;
+    line-height: 1.3;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .cell-score.no-record {
+    font-size: 9px;
+    padding: 0 2px;
+  }
+  .cell-symptom {
+    font-size: 9px;
+    margin-top: 1px;
+  }
+  /* 小屏幕隐藏其他月份日期，减少行数，避免遮挡 */
+  .calendar-cell.other-month {
+    display: none;
+  }
+}
+
 </style>
 </head>
 <body>
   <div class="app-container">
     <!-- 页头 -->
     <header class="app-header">
+      <button class="settings-btn" id="btn-open-drawer" title="设置" aria-label="打开设置菜单">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
       <h1>口腔溃疡预防健康管理</h1>
       <p class="subtitle">记录每日饮食作息，守护口腔健康</p>
     </header>
@@ -911,6 +1268,27 @@ body {
         <button class="btn btn-primary btn-lg" id="btn-go-record">
           开始记录今日
         </button>
+      </div>
+
+      <!-- V1.5 阶段三：健康评分柱状图模块 -->
+      <div class="card chart-card">
+        <div class="chart-header">
+          <h2>健康评分趋势</h2>
+          <div class="chart-toggle">
+            <button class="chart-toggle-btn active" id="chart-week-btn">周</button>
+            <button class="chart-toggle-btn" id="chart-month-btn">月</button>
+          </div>
+        </div>
+        <div class="chart-summary" id="chart-summary">
+          <span class="chart-avg-label">近7日平均分：</span>
+          <span class="chart-avg-value" id="chart-avg-value">--</span>
+        </div>
+        <div class="chart-container" id="chart-container">
+          <!-- JS动态渲染柱状图 -->
+        </div>
+        <div class="chart-x-axis" id="chart-x-axis">
+          <!-- JS动态渲染日期标签 -->
+        </div>
       </div>
 
       <!-- 日历模块 -->
@@ -1028,6 +1406,66 @@ body {
     </div>
   </div>
 
+  <!-- V1.5 阶段四：侧边抽屉菜单 -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h3>设置</h3>
+      <button class="drawer-close" id="btn-close-drawer" aria-label="关闭设置">×</button>
+    </div>
+    <nav class="drawer-menu">
+      <button class="drawer-menu-item" id="menu-edit-items">
+        <span class="menu-icon">✏️</span>
+        <span class="menu-text">评分项编辑</span>
+        <span class="menu-arrow">›</span>
+      </button>
+      <button class="drawer-menu-item" id="menu-edit-scores">
+        <span class="menu-icon">🎯</span>
+        <span class="menu-text">分值分布编辑</span>
+        <span class="menu-arrow">›</span>
+      </button>
+      <button class="drawer-menu-item" id="menu-reset-baseline">
+        <span class="menu-icon">🔄</span>
+        <span class="menu-text">恢复默认基线</span>
+        <span class="menu-arrow">›</span>
+      </button>
+      <div class="drawer-divider"></div>
+      <button class="drawer-menu-item" id="menu-export-data">
+        <span class="menu-icon">📤</span>
+        <span class="menu-text">导出备份</span>
+        <span class="menu-arrow">›</span>
+      </button>
+      <button class="drawer-menu-item" id="menu-import-data">
+        <span class="menu-icon">📥</span>
+        <span class="menu-text">导入恢复</span>
+        <span class="menu-arrow">›</span>
+      </button>
+    </nav>
+    <div class="drawer-footer">
+      <p class="drawer-version">V1.5 · 本地存储 · 离线可用</p>
+    </div>
+  </aside>
+
+  <!-- V1.5修正：评分项/分值编辑弹窗 -->
+  <div class="modal-overlay" id="edit-config-modal">
+    <div class="modal" style="max-width: 560px;">
+      <div class="modal-header">
+        <h3 id="edit-config-title">编辑评分项</h3>
+      </div>
+      <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+        <div id="edit-config-list">
+          <!-- JS动态渲染编辑表单 -->
+        </div>
+        <div class="edit-total-hint" id="edit-total-hint"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="edit-config-cancel">取消</button>
+        <button class="btn btn-secondary" id="edit-config-reset">恢复默认</button>
+        <button class="btn btn-primary" id="edit-config-save">保存配置</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast 提示 -->
   <div class="toast" id="toast"></div>
 
@@ -1048,7 +1486,8 @@ body {
   'use strict';
 
   // ========== 1. 评分项配置（V1.4：13项，严格匹配PRD） ==========
-  var SCORE_ITEMS = [
+  // V1.5修正：默认评分配置（作为基线，用户可自定义）
+  var DEFAULT_SCORE_ITEMS = [
     { id: 'green_veg',       name: 'B族食补：深绿蔬菜＞200g',                                    category: 'B族维生素', score: 7  },
     { id: 'coarse_grain',    name: 'B族食补：主食含1/3粗粮',                                      category: 'B族维生素', score: 6  },
     { id: 'b_vitamin',       name: 'B族补剂：按需服OTC复合B族1片，不长期过量',                   category: 'B族维生素', score: 4  },
@@ -1063,6 +1502,51 @@ body {
     { id: 'stress_control',  name: '压力管控：单次连续工作思考≤2h，中途休息',                      category: '压力管理',   score: 6  },
     { id: 'water',           name: '饮水1500–2000ml，保持黏膜湿润',                               category: '饮水',       score: 4  }
   ];
+
+  // V1.5修正：自定义配置存储key
+  var CUSTOM_CONFIG_KEY = 'oral_care_score_config';
+
+  // 当前生效的评分项（启动时加载自定义或默认）
+  var SCORE_ITEMS = loadScoreConfig();
+
+  /** 加载评分配置（优先localStorage自定义，否则用默认） */
+  function loadScoreConfig() {
+    try {
+      var storage = getStorage();
+      if (storage) {
+        var raw = storage.getItem(CUSTOM_CONFIG_KEY);
+        if (raw) {
+          var custom = JSON.parse(raw);
+          if (Array.isArray(custom) && custom.length > 0) {
+            return custom;
+          }
+        }
+      }
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(DEFAULT_SCORE_ITEMS)); // 深拷贝默认
+  }
+
+  /** 保存自定义评分配置到localStorage */
+  function saveScoreConfig(config) {
+    try {
+      var storage = getStorage();
+      if (!storage || !Array.isArray(config)) return false;
+      storage.setItem(CUSTOM_CONFIG_KEY, JSON.stringify(config));
+      SCORE_ITEMS = config;
+      TOTAL_MAX_SCORE = config.reduce(function (sum, item) { return sum + item.score; }, 0);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /** 恢复默认评分配置 */
+  function resetScoreConfig() {
+    try {
+      var storage = getStorage();
+      if (storage) storage.removeItem(CUSTOM_CONFIG_KEY);
+    } catch (e) {}
+    SCORE_ITEMS = JSON.parse(JSON.stringify(DEFAULT_SCORE_ITEMS));
+    TOTAL_MAX_SCORE = SCORE_ITEMS.reduce(function (sum, item) { return sum + item.score; }, 0);
+  }
 
   // ========== 1.1 症状选项配置（V1.4新增，不计分） ==========
   var SYMPTOM_OPTIONS = [
@@ -1360,7 +1844,13 @@ body {
     getRecord: getRecord,
     saveRecord: saveRecord,
     clearAllRecords: clearAllRecords,
-    STORAGE_KEY: STORAGE_KEY
+    STORAGE_KEY: STORAGE_KEY,
+    // V1.5修正：自定义评分配置
+    DEFAULT_SCORE_ITEMS: DEFAULT_SCORE_ITEMS,
+    getScoreItems: function () { return SCORE_ITEMS; },
+    saveScoreConfig: saveScoreConfig,
+    resetScoreConfig: resetScoreConfig,
+    getTotalMaxScore: function () { return TOTAL_MAX_SCORE; }
   };
 });
 
@@ -1385,7 +1875,8 @@ body {
     currentMonth: new Date().getMonth(), // 0-11
     todayKey: Core.formatDateKey(new Date()),
     currentView: 'home', // 'home' | 'record'
-    editingDateKey: null // V1.3：当前正在编辑的日期key（今日或历史补录日期）
+    editingDateKey: null, // V1.3：当前正在编辑的日期key（今日或历史补录日期）
+    chartMode: 'week' // V1.5：图表模式 week|month
   };
 
   // ========== DOM 引用 ==========
@@ -1422,6 +1913,30 @@ body {
     dom.btnExportData = document.getElementById('btn-export-data');
     dom.btnImportData = document.getElementById('btn-import-data');
     dom.importFileInput = document.getElementById('import-file-input');
+    // V1.5：柱状图模块
+    dom.chartContainer = document.getElementById('chart-container');
+    dom.chartXAxis = document.getElementById('chart-x-axis');
+    dom.chartAvgValue = document.getElementById('chart-avg-value');
+    dom.chartWeekBtn = document.getElementById('chart-week-btn');
+    dom.chartMonthBtn = document.getElementById('chart-month-btn');
+    // V1.5：侧边抽屉
+    dom.drawer = document.getElementById('drawer');
+    dom.drawerOverlay = document.getElementById('drawer-overlay');
+    dom.btnOpenDrawer = document.getElementById('btn-open-drawer');
+    dom.btnCloseDrawer = document.getElementById('btn-close-drawer');
+    dom.menuEditItems = document.getElementById('menu-edit-items');
+    dom.menuEditScores = document.getElementById('menu-edit-scores');
+    dom.menuResetBaseline = document.getElementById('menu-reset-baseline');
+    dom.menuExportData = document.getElementById('menu-export-data');
+    dom.menuImportData = document.getElementById('menu-import-data');
+    // V1.5修正：评分项编辑弹窗
+    dom.editConfigModal = document.getElementById('edit-config-modal');
+    dom.editConfigList = document.getElementById('edit-config-list');
+    dom.editConfigTitle = document.getElementById('edit-config-title');
+    dom.editConfigCancel = document.getElementById('edit-config-cancel');
+    dom.editConfigSave = document.getElementById('edit-config-save');
+    dom.editConfigReset = document.getElementById('edit-config-reset');
+    dom.editTotalHint = document.getElementById('edit-total-hint');
   }
 
   // ========== 工具函数 ==========
@@ -1562,12 +2077,247 @@ body {
 
   // ========== 视图切换 ==========
 
+  // ========== V1.5 阶段三：健康评分柱状图 ==========
+
+  /** 根据分数返回柱状图CSS类 */
+  function getBarClass(score) {
+    if (score >= 80) return 'healthy';
+    if (score >= 70) return 'low-risk';
+    if (score >= 60) return 'mid-risk';
+    return 'high-risk';
+  }
+
+  /** 渲染柱状图 */
+  function renderChart() {
+    if (!dom.chartContainer) return;
+    var allRecords = Core.getAllRecords();
+    var bars = [];
+    var labels = [];
+    var scores = [];
+
+    if (state.chartMode === 'week') {
+      // 近7天（含今天）
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date();
+        d.setDate(d.getDate() - i);
+        var key = Core.formatDateKey(d);
+        var rec = allRecords[key];
+        bars.push({
+          dateKey: key,
+          day: d.getDate(),
+          score: rec ? rec.score : null,
+          isToday: i === 0
+        });
+      }
+    } else {
+      // 近30天（月视图）
+      for (var j = 29; j >= 0; j--) {
+        var d2 = new Date();
+        d2.setDate(d2.getDate() - j);
+        var key2 = Core.formatDateKey(d2);
+        var rec2 = allRecords[key2];
+        bars.push({
+          dateKey: key2,
+          day: d2.getDate(),
+          score: rec2 ? rec2.score : null,
+          isToday: j === 0
+        });
+      }
+    }
+
+    // 计算平均分
+    var scoredBars = bars.filter(function (b) { return b.score !== null; });
+    var avgScore = '--';
+    if (scoredBars.length > 0) {
+      var sum = scoredBars.reduce(function (s, b) { return s + b.score; }, 0);
+      avgScore = Math.round(sum / scoredBars.length);
+    }
+    dom.chartAvgValue.textContent = avgScore;
+
+    // 渲染柱状图
+    dom.chartContainer.innerHTML = '';
+    dom.chartXAxis.innerHTML = '';
+    var maxHeight = 100; // 百分比高度基准
+
+    bars.forEach(function (bar) {
+      // 柱子
+      var barWrapper = document.createElement('div');
+      barWrapper.className = 'chart-bar-wrapper';
+
+      var valueEl = document.createElement('div');
+      valueEl.className = 'chart-bar-value';
+
+      var barEl = document.createElement('div');
+      if (bar.score === null) {
+        barEl.className = 'chart-bar no-data';
+        barEl.style.height = '2px';
+        valueEl.textContent = '';
+      } else {
+        barEl.className = 'chart-bar ' + getBarClass(bar.score);
+        var heightPct = Math.max(5, (bar.score / 100) * maxHeight);
+        barEl.style.height = heightPct + '%';
+        valueEl.textContent = bar.score;
+      }
+
+      barWrapper.appendChild(valueEl);
+      barWrapper.appendChild(barEl);
+      dom.chartContainer.appendChild(barWrapper);
+
+      // X轴标签
+      var labelEl = document.createElement('div');
+      labelEl.className = 'chart-x-label' + (bar.isToday ? ' today' : '');
+      labelEl.textContent = bar.day;
+      dom.chartXAxis.appendChild(labelEl);
+    });
+  }
+
+  /** 切换图表模式 */
+  function setChartMode(mode) {
+    state.chartMode = mode;
+    if (dom.chartWeekBtn) dom.chartWeekBtn.classList.toggle('active', mode === 'week');
+    if (dom.chartMonthBtn) dom.chartMonthBtn.classList.toggle('active', mode === 'month');
+    renderChart();
+  }
+
+  // ========== V1.5 阶段四：侧边抽屉菜单 ==========
+
+  /** 打开抽屉 */
+  function openDrawer() {
+    if (!dom.drawer) return;
+    dom.drawer.classList.add('active');
+    if (dom.drawerOverlay) dom.drawerOverlay.classList.add('active');
+  }
+
+  /** 关闭抽屉 */
+  function closeDrawer() {
+    if (!dom.drawer) return;
+    dom.drawer.classList.remove('active');
+    if (dom.drawerOverlay) dom.drawerOverlay.classList.remove('active');
+  }
+
+  /** 基线重置：恢复V1.4默认评分配置 */
+  function resetBaseline() {
+    if (confirm('确定要恢复默认评分基线吗？\n注意：不会删除历史记录数据，只重置评分项配置。')) {
+      Core.resetScoreConfig();
+      // 重新渲染表单和日历
+      renderRecordForm();
+      renderCalendar();
+      renderChart();
+      showToast('已恢复默认评分基线', 'success');
+      closeDrawer();
+    }
+  }
+
+  // ========== V1.5修正：评分项/分值编辑弹窗 ==========
+
+  /** 打开编辑配置弹窗 */
+  function openEditConfig(mode) {
+    // mode: 'items'=编辑名称, 'scores'=编辑分值
+    state.editMode = mode;
+    const titleEl = document.getElementById('edit-config-title');
+    titleEl.textContent = mode === 'items' ? '编辑评分项名称' : '编辑分值分布';
+    renderEditConfigList(mode);
+    document.getElementById('edit-config-modal').classList.add('active');
+    closeDrawer();
+  }
+
+  /** 渲染编辑配置列表 */
+  function renderEditConfigList(mode) {
+    const container = document.getElementById('edit-config-list');
+    const items = Core.getScoreItems();
+    let html = '';
+    items.forEach(function (item, idx) {
+      html += '<div class="edit-item-row">';
+      html += '<div class="edit-item-index">' + (idx + 1) + '</div>';
+      if (mode === 'items') {
+        // 编辑名称模式
+        html += '<input type="text" class="edit-item-name" data-index="' + idx + '" value="' + item.name.replace(/"/g, '&quot;') + '">';
+        html += '<div style="width:60px;text-align:center;font-size:13px;color:var(--text-sub);">' + item.score + '分</div>';
+      } else {
+        // 编辑分值模式
+        html += '<div style="flex:1;font-size:13px;color:var(--text-sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + item.name + '</div>';
+        html += '<input type="number" class="edit-item-score" data-index="' + idx + '" value="' + item.score + '" min="0" max="50">';
+        html += '<div style="width:24px;font-size:13px;color:var(--text-sub);">分</div>';
+      }
+      html += '</div>';
+    });
+    container.innerHTML = html;
+    updateEditTotal(mode);
+    // 绑定输入事件
+    container.querySelectorAll('.edit-item-name, .edit-item-score').forEach(function (input) {
+      input.addEventListener('input', function () { updateEditTotal(mode); });
+    });
+  }
+
+  /** 更新总分显示 */
+  function updateEditTotal(mode) {
+    let total = 0;
+    document.querySelectorAll('.edit-item-score').forEach(function (input) {
+      total += parseInt(input.value) || 0;
+    });
+    // 如果是名称编辑模式，总分从原始配置算
+    if (mode === 'items') {
+      total = Core.getTotalMaxScore();
+    }
+    const hint = document.getElementById('edit-total-hint');
+    hint.innerHTML = '当前总分：<span class="total-num">' + total + '</span> 分（满分100）';
+  }
+
+  /** 保存编辑配置 */
+  function saveEditConfig() {
+    const items = Core.getScoreItems().map(function (item) {
+      return { id: item.id, name: item.name, category: item.category, score: item.score };
+    });
+    if (state.editMode === 'items') {
+      // 编辑名称
+      document.querySelectorAll('.edit-item-name').forEach(function (input) {
+        const idx = parseInt(input.dataset.index);
+        if (items[idx]) items[idx].name = input.value.trim() || items[idx].name;
+      });
+    } else {
+      // 编辑分值
+      document.querySelectorAll('.edit-item-score').forEach(function (input) {
+        const idx = parseInt(input.dataset.index);
+        let val = parseInt(input.value);
+        if (isNaN(val) || val < 0) val = 0;
+        if (val > 50) val = 50;
+        if (items[idx]) items[idx].score = val;
+      });
+    }
+    // 保存
+    Core.saveScoreConfig(items);
+    // 重新渲染
+    renderRecordForm();
+    renderCalendar();
+    renderChart();
+    closeEditConfig();
+    showToast('配置已保存', 'success');
+  }
+
+  /** 编辑弹窗恢复默认 */
+  function resetEditConfig() {
+    if (confirm('确定恢复默认评分配置吗？')) {
+      Core.resetScoreConfig();
+      renderEditConfigList(state.editMode);
+      renderRecordForm();
+      renderCalendar();
+      renderChart();
+      showToast('已恢复默认', 'success');
+    }
+  }
+
+  /** 关闭编辑弹窗 */
+  function closeEditConfig() {
+    document.getElementById('edit-config-modal').classList.remove('active');
+  }
+
   function showHomeView() {
     state.currentView = 'home';
     state.editingDateKey = null; // V1.3：返回首页时重置编辑日期
     dom.homeView.style.display = 'block';
     dom.recordView.classList.remove('active');
     renderCalendar(); // 回到首页时刷新日历
+    renderChart(); // V1.5：刷新柱状图
   }
 
   function showRecordView(dateKey) {
@@ -1758,6 +2508,9 @@ body {
     });
 
     if (success) {
+      // V1.5修复：保存后立即强制刷新日历数据，避免偶发不渲染
+      renderCalendar();
+      renderChart(); // V1.5：同步刷新柱状图
       // V1.4：保存成功后弹出反馈弹窗，不再用toast
       showSubmitFeedbackModal(score, risk, checkedMap, editKey);
     } else {
@@ -2024,6 +2777,38 @@ body {
       }
     });
 
+    // V1.5：柱状图周/月切换
+    if (dom.chartWeekBtn) {
+      dom.chartWeekBtn.addEventListener('click', function () { setChartMode('week'); });
+    }
+    if (dom.chartMonthBtn) {
+      dom.chartMonthBtn.addEventListener('click', function () { setChartMode('month'); });
+    }
+
+    // V1.5：侧边抽屉
+    if (dom.btnOpenDrawer) dom.btnOpenDrawer.addEventListener('click', openDrawer);
+    if (dom.btnCloseDrawer) dom.btnCloseDrawer.addEventListener('click', closeDrawer);
+    if (dom.drawerOverlay) dom.drawerOverlay.addEventListener('click', closeDrawer);
+    if (dom.menuResetBaseline) dom.menuResetBaseline.addEventListener('click', resetBaseline);
+    if (dom.menuExportData) dom.menuExportData.addEventListener('click', function () {
+      closeDrawer();
+      exportData();
+    });
+    if (dom.menuImportData) dom.menuImportData.addEventListener('click', function () {
+      closeDrawer();
+      triggerImport();
+    });
+    if (dom.menuEditItems) dom.menuEditItems.addEventListener('click', function () {
+      openEditConfig('items');
+    });
+    if (dom.menuEditScores) dom.menuEditScores.addEventListener('click', function () {
+      openEditConfig('scores');
+    });
+    // V1.5修正：编辑弹窗按钮
+    if (dom.editConfigCancel) dom.editConfigCancel.addEventListener('click', closeEditConfig);
+    if (dom.editConfigSave) dom.editConfigSave.addEventListener('click', saveEditConfig);
+    if (dom.editConfigReset) dom.editConfigReset.addEventListener('click', resetEditConfig);
+
     // ESC 键关闭弹窗
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && dom.detailModal.classList.contains('active')) {
@@ -2051,14 +2836,15 @@ body {
     // V1.4：只在第一次加载V1.4版本时清空旧版本数据，之后刷新/重开不再清空
     // 用版本标记控制，确保数据持久化
     var versionKey = 'oral_care_app_version';
-    var currentVersion = 'v1.4';
+    var currentVersion = 'v1.5';
     try {
       var storage = (typeof window !== 'undefined' && window.localStorage) ? window.localStorage : null;
       var storedVersion = storage ? storage.getItem(versionKey) : null;
       if (storedVersion !== currentVersion) {
-        Core.clearAllRecords();
+        // V1.5：不清空历史数据，只更新版本标记
+        // Core.clearAllRecords();
         if (storage) storage.setItem(versionKey, currentVersion);
-        console.log('V1.4首次加载，旧版本数据已清空');
+        console.log('V1.5首次加载，历史数据完整保留');
       }
     } catch (e) {
       Core.clearAllRecords();
@@ -2066,9 +2852,10 @@ body {
 
     bindEvents();
     renderCalendar();
+    renderChart(); // V1.5：初始化柱状图
     // V1.4-PWA：注册Service Worker实现离线支持
     registerServiceWorker();
-    console.log('口腔溃疡预防健康管理APP V1.4-PWA 已启动');
+    console.log('口腔溃疡预防健康管理APP V1.5 已启动');
   }
 
   // DOM 就绪后初始化
@@ -2102,7 +2889,19 @@ body {
     exportData: exportData,
     triggerImport: triggerImport,
     handleImportFile: handleImportFile,
-    registerServiceWorker: registerServiceWorker
+    registerServiceWorker: registerServiceWorker,
+    // V1.5：柱状图
+    renderChart: renderChart,
+    setChartMode: setChartMode,
+    // V1.5：侧边抽屉
+    openDrawer: openDrawer,
+    closeDrawer: closeDrawer,
+    resetBaseline: resetBaseline,
+    // V1.5修正：评分配置编辑
+    openEditConfig: openEditConfig,
+    closeEditConfig: closeEditConfig,
+    saveEditConfig: saveEditConfig,
+    resetEditConfig: resetEditConfig
   };
 })();
 

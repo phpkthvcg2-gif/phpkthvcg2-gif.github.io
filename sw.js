@@ -4,8 +4,8 @@
  * 策略：缓存优先（Cache First），网络请求成功后更新缓存
  */
 
-const CACHE_NAME = 'oral-health-v1.4-pwa';
-const CACHE_VERSION = 'v1.4.0';
+const CACHE_NAME = 'oral-health-v1.5.1';
+const CACHE_VERSION = 'v1.5.1';
 
 // 需要缓存的静态资源列表
 const STATIC_ASSETS = [
